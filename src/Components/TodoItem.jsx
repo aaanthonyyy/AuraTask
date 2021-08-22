@@ -5,6 +5,8 @@ import { ReactComponent as Delete } from "../Assets/delete-bin-line.svg";
 import { ReactComponent as Edit } from "../Assets/pencil-line.svg";
 import { ReactComponent as Drag} from "../Assets/drag_indicator_black_24dp.svg"
 
+import TodoActions from "./TodoActions";
+
 const Wrapper = styled.div`
 	background-color: #fff;
 	/* border-left: 5px solid #5F87FE !important; */
@@ -65,34 +67,6 @@ const Wrapper = styled.div`
 		color: #9a9ead;
 		font-size: 0.75rem;
 		user-select: none;
-	}
-`;
-
-const TodoActions = styled.div`
-	display: flex;
-	align-items: center;
-	gap: 2px;
-	border-radius: 8px;
-
-	& > svg:not(:last-of-type) {
-		cursor: pointer;
-		border: 1px solid #f5f5f5;
-		width: 35px;
-		height: 35px;
-		padding: 8px;
-		border-radius: 4px;
-
-		fill: #9c9cb6;
-		&:hover {
-			fill: #5c5c68;
-			background-color: hsl(210, 28.571428571428513%, 95%);
-		}
-
-	}
-	& svg:last-of-type{
-		fill: #afb3b8;
-		margin-right: 0;
-		margin-left: 20px;
 	}
 `;
 
