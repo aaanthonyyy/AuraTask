@@ -42,9 +42,7 @@ const Wrapper = styled.div`
 
 	input:checked + label {
 		color: #fff;
-		background-image:linear-gradient(to left, #80818b, #80818b);
-		background-repeat: no-repeat;
-		/* background-color: #80818b; */
+		background-color: #80818b;
 		transition: background-color 400ms ease-in-out;
 	}
 `;
