@@ -10,6 +10,8 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 
 	background-color: #f5f6fa;
+
+	overflow-y: scroll;
 }
 
 code {

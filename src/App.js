@@ -1,6 +1,10 @@
-import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
+import uuid from "react-uuid";
 import randomColor from "randomcolor";
+import styled from "styled-components";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+
+import "./animations.css";
 
 import InputItem from "./Components/InputItem";
 import TodoItem from "./Components/TodoItem";
@@ -16,9 +20,19 @@ const Form = styled.form`
 
 const App = () => {
 	const [todoItems, setTodoItems] = useState([]);
-	const [filter, setFilter] = useState("all");
+	const [filter, setFilter] = useState(localStorage.getItem("filter") || "all");
 
 	const ref = useRef("InputItem");
+
+	useEffect(() => {
+		const items = localStorage?.getItem("todos");
+		items && setTodoItems(JSON.parse(items));
+
+		console.log(filter);
+
+		const localFilter = localStorage?.getItem("filter");
+		localFilter && setFilter(localFilter)
+	}, [filter]);
 
 	useEffect(() => {
 		function handleKeyDown(event) {
@@ -35,13 +49,15 @@ const App = () => {
 
 		document.addEventListener("keydown", handleKeyDown);
 
-
 		// Don't forget to clean up
 		return function cleanup() {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-
 	}, []);
+
+	const addToLocalStorage = (todos) => {
+		localStorage.setItem("todos", JSON.stringify(todos));
+	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -49,57 +65,60 @@ const App = () => {
 		const date = new Date();
 
 		if (ref.current.value && ref.current.value !== " ") {
-			setTodoItems([
-				...todoItems,
-				{
-					item: ref.current.value,
-					color: randomColor(),
-					isComplete: false,
-					time: date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
-				},
-			]);
+			const newItem = {
+				item: ref.current.value,
+				color: randomColor(),
+				isComplete: false,
+				time: date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+				uuid: uuid(),
+			};
+
+			addToLocalStorage([...todoItems, newItem]);
+			setTodoItems([...todoItems, newItem]);
 
 			setTimeout(() => {
-				handleFilter(filter)
+				handleFilter(filter);
 			}, 100);
 			ref.current.value = null;
 		}
 
-		console.log(todoItems);
 	};
 
-	const handleDelete = (index) => {
-		console.log("deleted");
-		setTodoItems(todoItems.filter((item, i) => i !== index));
+	const handleDelete = (uuid) => {
+		addToLocalStorage(todoItems.filter((item) => item.uuid !== uuid));
+		setTodoItems(todoItems.filter((item) => item.uuid !== uuid));
 	};
 
-	const handleComplete = (index) => {
-		console.log("completed");
-		const newItems = todoItems.map((data, i) => {
-			if (i === index) {
+	const handleComplete = (uuid) => {
+		const newItems = todoItems.map((data) => {
+			if (data.uuid === uuid) {
 				data.isComplete = !data.isComplete;
 			}
 
 			return data;
 		});
 
+		addToLocalStorage(newItems);
 		setTodoItems(newItems);
 	};
 
 	const handleFilter = (filter) => {
 		switch (filter) {
 			case "all":
+				localStorage.setItem("filter", "all");
 				return todoItems;
 
 			case "completed":
-					return todoItems.filter((item) => {
-						return item.isComplete === true;
-					})
+				localStorage.setItem("filter", "completed");
+				return todoItems.filter((item) => {
+					return item.isComplete === true;
+				});
 
 			case "active":
-					return todoItems.filter((item) => {
-						return item.isComplete === false;
-					})
+				localStorage.setItem("filter", "active");
+				return todoItems.filter((item) => {
+					return item.isComplete === false;
+				});
 
 			default:
 				return todoItems;
@@ -118,19 +137,23 @@ const App = () => {
 					</Info>
 				</Form>
 
-				<Filter handleFilter={setFilter} />
-
+				<Filter handleFilter={setFilter} filter={filter} />
 				{handleFilter(filter).length > 0 ? (
-					handleFilter(filter).map((item, index) => {
-						return (
-							<TodoItem
-								key={index}
-								handleDelete={() => handleDelete(index)}
-								handleComplete={() => handleComplete(index)}
-								{...item}
-							/>
-						);
-					})
+					<TransitionGroup appear={true} enter={true} exit={true}>
+						{handleFilter(filter).map((item) => {
+							return (
+								<CSSTransition key={item.uuid} classNames="item">
+									<TodoItem
+										id={item.uuid}
+										key={item.uuid}
+										handleDelete={() => handleDelete(item.uuid)}
+										handleComplete={() => handleComplete(item.uuid)}
+										{...item}
+									/>
+								</CSSTransition>
+							);
+						})}
+					</TransitionGroup>
 				) : (
 					<Info style={{ marginTop: "20vh" }}>You have no items to complete!</Info>
 				)}
