@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useEffect } from "react";
 
 const Wrapper = styled.div`
 	background-color: #fff;
