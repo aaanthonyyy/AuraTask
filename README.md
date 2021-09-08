@@ -1,8 +1,41 @@
-# Getting Started with Create React App
+<p align=center vertical-align=bottom>
+  <img alt="Netlify" align=center src="https://img.shields.io/netlify/91476aa8-c38e-4b33-9aa8-372ccb3d03e9?style=for-the-badge"/>
+  <img alt="Lines of Code" align=center src="https://img.shields.io/tokei/lines/github.com/aaanthonyyy/react-todo-list?style=for-the-badge"/>
+  <img alt="npm peer dependency version" align=center src="https://img.shields.io/npm/dependency-version/react-dom/peer/react?logo=react&style=for-the-badge">
+  <br/>
+  <br/>
+</p>
+
+<p align=center>
+  <img height=auto width=120px src="https://github.com/aaanthonyyy/react-todo-list/blob/master/public/logo.png"/>
+  <h3 align="center">Sexy Todo List</h3>
+  
+  <p align="center">
+    A simple todo-list web app built using React.
+    <br/>
+    <br/>
+    <a href="https://sexytodolist.netlify.app/">View Demo</a>
+    ·
+    <a href="https://github.com/aaanthonyyy/react-todo-list/issues/new/choose">Report Bug</a>
+    ·
+    <a href="https://github.com/aaanthonyyy/react-todo-list/issues/new/choose">Request Feature</a>
+  </p>
+</p>
+
+<br/>
+
+## About The App
+![image](https://user-images.githubusercontent.com/43044255/132586331-4c1c1cee-db3f-40c6-89ce-9edb460525f1.png)
+
+
+<br/>
+<br/>
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 
