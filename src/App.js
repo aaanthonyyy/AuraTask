@@ -1,41 +1,35 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useReducer } from "react";
+import reduceTodos from "./Actions/reduceTodos";
+import reduceFilter from "./Actions/reduceFilters";
+
 import uuid from "react-uuid";
 import randomColor from "randomcolor";
-import styled from "styled-components";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-
-import "./animations.css";
 
 import InputItem from "./Components/InputItem";
 import TodoItem from "./Components/TodoItem";
 import Background from "./Components/Background";
 import Filter from "./Components/Filter";
 import Submit from "./Components/Submit";
+import Form from "./Components/Form";
 import Info from "./Components/Info";
 
-const Form = styled.form`
-	position: relative;
-	margin-bottom: 40px;
-`;
-
 const App = () => {
-	const [todoItems, setTodoItems] = useState([]);
-	const [filter, setFilter] = useState(localStorage.getItem("filter") || "all");
-
-	const ref = useRef("InputItem");
-
-	useEffect(() => {
-		const items = localStorage?.getItem("todos");
-		items && setTodoItems(JSON.parse(items));
-
-		console.log(filter);
-
-		const localFilter = localStorage?.getItem("filter");
-		localFilter && setFilter(localFilter)
-	}, [filter]);
+	const [todoItems, dispatch] = useReducer(
+		reduceTodos,
+		JSON.parse(localStorage.getItem("todos")) || []
+	);
+	const [filter, setFilter] = useState(localStorage.getItem("filter") || "ALL");
+	const [filteredItems, dispatchFilter] = useReducer(reduceFilter, todoItems);
 
 	useEffect(() => {
-		function handleKeyDown(event) {
+		handleFilter(filter);
+	}, [filter, todoItems]);
+
+	// input ref
+	const ref = useRef();
+	useEffect(() => {
+		const handleKeyDown = (event) => {
+			/* TODO: Refactor setTiemout blocks*/
 			if (event.key === "/") {
 				setTimeout(() => {
 					ref.current.focus();
@@ -45,19 +39,15 @@ const App = () => {
 					ref.current.blur();
 				}, 1);
 			}
-		}
+		};
 
 		document.addEventListener("keydown", handleKeyDown);
 
 		// Don't forget to clean up
-		return function cleanup() {
+		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
 	}, []);
-
-	const addToLocalStorage = (todos) => {
-		localStorage.setItem("todos", JSON.stringify(todos));
-	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -69,60 +59,21 @@ const App = () => {
 				item: ref.current.value,
 				color: randomColor(),
 				isComplete: false,
-				time: date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+				isEdit: false,
+				time: date.toLocaleTimeString("en-US", {
+					hour: "2-digit",
+					minute: "2-digit",
+				}),
 				uuid: uuid(),
 			};
 
-			addToLocalStorage([...todoItems, newItem]);
-			setTodoItems([...todoItems, newItem]);
-
-			setTimeout(() => {
-				handleFilter(filter);
-			}, 100);
+			dispatch({ type: "ADD_TODO", payload: newItem });
 			ref.current.value = null;
 		}
-
-	};
-
-	const handleDelete = (uuid) => {
-		addToLocalStorage(todoItems.filter((item) => item.uuid !== uuid));
-		setTodoItems(todoItems.filter((item) => item.uuid !== uuid));
-	};
-
-	const handleComplete = (uuid) => {
-		const newItems = todoItems.map((data) => {
-			if (data.uuid === uuid) {
-				data.isComplete = !data.isComplete;
-			}
-
-			return data;
-		});
-
-		addToLocalStorage(newItems);
-		setTodoItems(newItems);
 	};
 
 	const handleFilter = (filter) => {
-		switch (filter) {
-			case "all":
-				localStorage.setItem("filter", "all");
-				return todoItems;
-
-			case "completed":
-				localStorage.setItem("filter", "completed");
-				return todoItems.filter((item) => {
-					return item.isComplete === true;
-				});
-
-			case "active":
-				localStorage.setItem("filter", "active");
-				return todoItems.filter((item) => {
-					return item.isComplete === false;
-				});
-
-			default:
-				return todoItems;
-		}
+		dispatchFilter({ type: filter, payload: todoItems });
 	};
 
 	return (
@@ -137,23 +88,20 @@ const App = () => {
 					</Info>
 				</Form>
 
-				<Filter handleFilter={setFilter} filter={filter} />
-				{handleFilter(filter).length > 0 ? (
-					<TransitionGroup appear={true} enter={true} exit={true}>
-						{handleFilter(filter).map((item) => {
-							return (
-								<CSSTransition key={item.uuid} classNames="item">
-									<TodoItem
-										id={item.uuid}
-										key={item.uuid}
-										handleDelete={() => handleDelete(item.uuid)}
-										handleComplete={() => handleComplete(item.uuid)}
-										{...item}
-									/>
-								</CSSTransition>
-							);
-						})}
-					</TransitionGroup>
+				<Filter handleFilter={setFilter} filter={filter} count={todoItems.length} />
+				{filteredItems.length > 0 ? (
+					filteredItems.map((item) => {
+						return (
+							<TodoItem
+								key={item.uuid}
+								id={item.uuid}
+								handleComplete={() => dispatch({ type: "COMPLETE", uuid: item.uuid })}
+								handleDelete={() => dispatch({ type: "DELETE", uuid: item.uuid })}
+								dispatchEdit={dispatch}
+								{...item}
+							/>
+						);
+					})
 				) : (
 					<Info style={{ marginTop: "20vh" }}>You have no items to complete!</Info>
 				)}
