@@ -10,9 +10,9 @@ import { ReactComponent as Drag } from "../Assets/drag_indicator_black_24dp.svg"
 import TodoActions from "./TodoActions";
 import TodoCard from "./TodoCard";
 
-const Item = (props) => {
+const TodoItem = React.memo((props) => {
 	const [isEdit, setIsEdit] = useState(false);
-	const [editValue, setEditValue] = useState(props.item);
+	const [editValue, setEditValue] = useState(props.text);
 
 	const editRef = useRef();
 
@@ -20,6 +20,9 @@ const Item = (props) => {
 		const handleEnter = (e) => {
 			if (e.key === "Enter") {
 				handleSubmit();
+			} else if (e.key === "Escape") {
+				setEditValue(props.text);
+				setIsEdit(false);
 			}
 		};
 
@@ -31,17 +34,15 @@ const Item = (props) => {
 		return () => {
 			document.removeEventListener("keydown", handleEnter);
 		};
-	}, [isEdit, editValue]);
+	}, [isEdit, editValue, props]);
 
 	const handleSubmit = () => {
-		setIsEdit(() => {
-			props.dispatchEdit({
-				type: "EDIT",
-				value: editValue,
-				uuid: props.uuid,
-			});
-			return false;
+		props.dispatchEdit({
+			type: "EDIT",
+			value: editValue,
+			uuid: props.uuid,
 		});
+		setIsEdit(false);
 	};
 
 	return (
@@ -58,27 +59,41 @@ const Item = (props) => {
 						onBlur={handleSubmit}
 					/>
 				) : (
-					<h1 onClick={props.handleComplete}>{props.item}</h1>
+					<h1 onClick={props.handleComplete}>{props.text}</h1>
 				)}
 				<TodoActions>
-					<Delete onClick={props.handleDelete} />
-					<Edit onClick={() => setIsEdit(!isEdit)} />
+					{isEdit ? (
+						<>
+							<Delete onClick={() => setIsEdit(false)} />
+							<Edit onClick={handleSubmit} />
+						</>
+					) : (
+						<>
+							<Delete
+								onClick={() => {
+									// props.toast("Deleting Todo");
+									props.handleDelete();
+								}}
+							/>
+							<Edit onClick={() => setIsEdit(true)} />
+						</>
+					)}
 					<Drag />
 				</TodoActions>
 			</div>
 			<small>{props.time}</small>
 		</TodoCard>
 	);
-};
+});
 
-Item.propTypes = {
+TodoItem.propTypes = {
 	handleComplete: PropTypes.func,
 	handleDelete: PropTypes.func,
-	item: PropTypes.string,
+	text: PropTypes.string,
 	time: PropTypes.string,
 	isEdit: PropTypes.bool,
 	dispatchEdit: PropTypes.func,
 	uuid: PropTypes.string,
 };
 
-export default Item;
+export { TodoItem };

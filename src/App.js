@@ -1,12 +1,19 @@
 import React, { useState, useRef, useEffect, useReducer } from "react";
+import {
+	getLocalStorageTodos,
+	getLocalFilters,
+} from "./Actions/useLocalStorage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import useFilter from "./Actions/useFilters";
 import reduceTodos from "./Actions/reduceTodos";
-import reduceFilter from "./Actions/reduceFilters";
 
 import uuid from "react-uuid";
 import randomColor from "randomcolor";
 
 import InputItem from "./Components/InputItem";
-import TodoItem from "./Components/TodoItem";
+import { TodoItem } from "./Components/TodoItem";
 import Background from "./Components/Background";
 import Filter from "./Components/Filter";
 import Submit from "./Components/Submit";
@@ -19,11 +26,6 @@ const App = () => {
 		JSON.parse(localStorage.getItem("todos")) || []
 	);
 	const [filter, setFilter] = useState(localStorage.getItem("filter") || "ALL");
-	const [filteredItems, dispatchFilter] = useReducer(reduceFilter, todoItems);
-
-	useEffect(() => {
-		handleFilter(filter);
-	}, [filter, todoItems]);
 
 	// input ref
 	const ref = useRef();
@@ -40,7 +42,6 @@ const App = () => {
 				}, 1);
 			}
 		};
-
 		document.addEventListener("keydown", handleKeyDown);
 
 		// Don't forget to clean up
@@ -48,6 +49,25 @@ const App = () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
 	}, []);
+
+	useEffect(() => {
+		// Sync accross tabs
+		const handleStorage = () => {
+			setFilter(getLocalFilters());
+			dispatch({ type: "REFRESH", payload: getLocalStorageTodos() });
+		};
+
+		const handleTimeout = setTimeout(() => {
+			window.addEventListener("focus", handleStorage);
+			console.log("listener");
+		}, 300);
+
+		return () => {
+			window.removeEventListener("focus", handleStorage);
+			clearTimeout(handleTimeout);
+			console.log("stop liste");
+		};
+	}, [todoItems]);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -59,25 +79,26 @@ const App = () => {
 				item: ref.current.value,
 				color: randomColor(),
 				isComplete: false,
-				isEdit: false,
 				time: date.toLocaleTimeString("en-US", {
 					hour: "2-digit",
 					minute: "2-digit",
 				}),
 				uuid: uuid(),
 			};
-
-			dispatch({ type: "ADD_TODO", payload: newItem });
 			ref.current.value = null;
+			dispatch({ type: "ADD_TODO", payload: newItem });
 		}
 	};
 
-	const handleFilter = (filter) => {
-		dispatchFilter({ type: filter, payload: todoItems });
-	};
+	const filteredItems = useFilter({
+		type: filter,
+		payload: todoItems,
+	});
 
 	return (
 		<>
+			<ToastContainer limit={2} autoClose={3000} />
+
 			<Background title="Todo List" />
 			<main>
 				<Form>
@@ -89,15 +110,17 @@ const App = () => {
 				</Form>
 
 				<Filter handleFilter={setFilter} filter={filter} count={todoItems.length} />
+
 				{filteredItems.length > 0 ? (
 					filteredItems.map((item) => {
 						return (
 							<TodoItem
 								key={item.uuid}
-								id={item.uuid}
+								toast={toast}
 								handleComplete={() => dispatch({ type: "COMPLETE", uuid: item.uuid })}
 								handleDelete={() => dispatch({ type: "DELETE", uuid: item.uuid })}
 								dispatchEdit={dispatch}
+								text={item.item}
 								{...item}
 							/>
 						);

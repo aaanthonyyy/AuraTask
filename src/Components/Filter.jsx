@@ -81,7 +81,7 @@ const Filter = (props) => {
 					onChange={() => props.handleFilter("ALL")}
 				/>
 				<label htmlFor="all">
-					All<span>{props.count <= 20 ? props.count : "20+"}</span>
+					All<span>{props.count < 100 ? props.count : "99+"}</span>
 				</label>
 			</div>
 
@@ -115,7 +115,7 @@ const Filter = (props) => {
 Filter.propTypes = {
 	filter: PropTypes.string,
 	handleFilter: PropTypes.func,
-	count: PropTypes.object,
+	count: PropTypes.number,
 };
 
 export default Filter;

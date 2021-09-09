@@ -1,6 +1,4 @@
-const addLocalStorage = (todos) => {
-	localStorage.setItem("todos", JSON.stringify(todos));
-};
+import { /* getLocalStorageTodos, */ addLocalStorage } from "./useLocalStorage";
 
 const handleDelete = (state, action) => {
 	const newState = state.filter((item) => item.uuid !== action.uuid);
@@ -51,6 +49,10 @@ const reduceTodos = (state, action) => {
 
 		case "EDIT": {
 			return handleEdit(state, action);
+		}
+
+		case "REFRESH": {
+			return action.payload;
 		}
 
 		default:

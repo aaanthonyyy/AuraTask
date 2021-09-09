@@ -1,4 +1,4 @@
-const reduceFilter = (state, action) => {
+const useFilter = (action) => {
 	switch (action.type.toUpperCase()) {
 		case "ALL":
 			localStorage.setItem("filter", "ALL");
@@ -21,4 +21,4 @@ const reduceFilter = (state, action) => {
 	}
 };
 
-export default reduceFilter;
+export default useFilter;
