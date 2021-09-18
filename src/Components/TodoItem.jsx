@@ -9,6 +9,7 @@ import { ReactComponent as Drag } from "../Assets/drag_indicator_black_24dp.svg"
 
 import TodoActions from "./TodoActions";
 import TodoCard from "./TodoCard";
+import moment from "moment";
 
 const TodoItem = React.memo((props) => {
 	const [isEdit, setIsEdit] = useState(false);
@@ -43,6 +44,11 @@ const TodoItem = React.memo((props) => {
 			uuid: props.uuid,
 		});
 		setIsEdit(false);
+	};
+
+	const formateTime = (dateStr) => {
+		const date = moment(dateStr)
+		return date.isValid() ? date.calendar() : dateStr;
 	};
 
 	return (
@@ -81,7 +87,8 @@ const TodoItem = React.memo((props) => {
 					<Drag />
 				</TodoActions>
 			</div>
-			<small>{props.time}</small>
+			{/* <small>{props.time}</small> */}
+			<small>{formateTime(props.time)}</small>
 		</TodoCard>
 	);
 });

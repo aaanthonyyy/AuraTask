@@ -19,6 +19,8 @@ import Filter from "./Components/Filter";
 import Submit from "./Components/Submit";
 import Form from "./Components/Form";
 import Info from "./Components/Info";
+import moment from "moment";
+
 
 const App = () => {
 	const [todoItems, dispatch] = useReducer(
@@ -72,17 +74,15 @@ const App = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		const date = new Date();
+		const date = moment();
+		console.log(date);
 
 		if (ref.current.value && ref.current.value !== " ") {
 			const newItem = {
 				item: ref.current.value,
 				color: randomColor(),
 				isComplete: false,
-				time: date.toLocaleTimeString("en-US", {
-					hour: "2-digit",
-					minute: "2-digit",
-				}),
+				time: date,
 				uuid: uuid(),
 			};
 			ref.current.value = null;
@@ -103,7 +103,7 @@ const App = () => {
 			<main>
 				<Form>
 					<InputItem ref={ref} placeholder="Add new todo item" />
-					<Submit onClick={(event) => handleSubmit(event)} />
+					<Submit handleSubmit={handleSubmit} />
 					<Info onClick={() => ref.current.focus()}>
 						Press <kbd>/</kbd> to jump to input
 					</Info>
