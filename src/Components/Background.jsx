@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import DarkModeToggle from "react-dark-mode-toggle";
@@ -55,6 +55,8 @@ const Background = (props) => {
 
 Background.propTypes = {
 	title: PropTypes.string,
+	setIsDarkTheme: PropTypes.func,
+	isDarkTheme: PropTypes.bool
 };
 
 export default Background;

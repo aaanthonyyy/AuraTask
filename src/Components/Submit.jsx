@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
 
@@ -36,6 +38,11 @@ const Submit = (props) => {
 			<ReactTooltip />
 		</>
 	);
+};
+
+Submit.propTypes = {
+	background: PropTypes.string,
+	handleSubmit: PropTypes.func
 };
 
 export default Submit;

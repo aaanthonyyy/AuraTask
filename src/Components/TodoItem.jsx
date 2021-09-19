@@ -47,7 +47,7 @@ const TodoItem = React.memo((props) => {
 	};
 
 	const formateTime = (dateStr) => {
-		const date = moment(dateStr)
+		const date = moment(dateStr);
 		return date.isValid() ? date.calendar() : dateStr;
 	};
 
