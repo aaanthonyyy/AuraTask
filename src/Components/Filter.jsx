@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-	background-color: #fff;
+	background-color: ${({theme}) => theme.filter.background};
 	max-width: 400px;
 	margin: auto;
 	padding: 5px;
@@ -28,6 +28,7 @@ const Wrapper = styled.div`
 	}
 
 	label {
+		color: ${({theme}) => theme.text};
 		cursor: pointer;
 		display: inline-flex;
 		align-items: center;
@@ -42,7 +43,7 @@ const Wrapper = styled.div`
 		z-index: 101;
 
 		&:hover {
-			background-color: #f2f2f2;
+			background-color: ${({theme}) => theme.filter.hover};
 		}
 
 		span {
@@ -58,8 +59,8 @@ const Wrapper = styled.div`
 
 	input:checked + label {
 		color: #fff;
-		background-color: #80818b;
-		transition: background-color 400ms ease-in-out;
+		background-color: ${({theme}) => theme.filter.active};
+		transition: background-color 300ms ease-in-out;
 
 		span {
 			background-color: #fff;

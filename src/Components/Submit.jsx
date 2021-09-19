@@ -14,7 +14,7 @@ const Plus = styled.input.attrs({
 	position: absolute;
 	padding: 5px;
 	left: unset;
-	top:	15px;
+	top: 15px;
 	right: 15px;
 	transition: all 100ms ease-in-out;
 
@@ -27,8 +27,10 @@ const Submit = (props) => {
 	return (
 		<>
 			<Plus
+				data-background-color={props.background}
 				data-tip="Add Todo"
 				data-effect="solid"
+				data-delay-show="500"
 				onClick={(event) => props.handleSubmit(event)}
 			/>
 			<ReactTooltip />

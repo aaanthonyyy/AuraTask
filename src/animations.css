@@ -1,26 +1,53 @@
-.remove-btn {
-	margin-right: 0.5rem;
-}
-
 .item-enter {
 	opacity: 0;
+    transform: translateY(-25%);
 }
 .item-enter-active {
     opacity: 1;
     transform: translateY(0);
-    transition-property: transform, opacity;
-	transition: 500ms ease-in;
+	transition: 100ms ease-in !important;
+	transition-property: height, opacity, transform;
 }
 .item-exit {
-    opacity: 1;
-    transform: translateY(0);
+	opacity: 1;
+	height: 50px;
+    transform: scaleY(1);
+	/* animation: shrink 500ms ease-in !important; */
 }
 .item-exit-active {
-    opacity: 0;
-    transform: translateY(-10%);
-    transition-property: transform, opacity;
-	transition: opacity 200ms ease-in-out;
+	transform: scaleY(0);
+	margin: 0 !important;
+	padding: 0 !important;
+	opacity: 0;
+	height: 0;
+	transition-property: height, opacity, transform;
+	transition: 300ms ease-in-out;
 }
 
+@keyframes shrink {
+	0% {
+		opacity: 1;
+		transform: scale(1);
+		height: initial;
+	}
 
+	30% {
+		height: initial;
+		border: initial;
+	}
 
+	20% {
+		opacity: 0;
+	}
+
+	90% {
+		transform: scale(0);
+	}
+
+	100% {
+		opacity: 0;
+		height: 0;
+		padding: 0;
+		border: none;
+	}
+}

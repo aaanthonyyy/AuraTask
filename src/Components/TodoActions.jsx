@@ -8,16 +8,18 @@ const TodoActions = styled.div`
 
 	& > svg:not(:last-of-type) {
 		cursor: pointer;
-		border: 1px solid #f5f5f5;
+		border: 1px solid ${({theme}) => theme.border};
 		width: 35px;
 		height: 35px;
 		padding: 8px;
 		border-radius: 4px;
 
 		fill: #9c9cb6;
+		transition: background-color 100ms ease-in-out;
+		
 		&:hover {
 			fill: #5c5c68;
-			background-color: hsl(210, 28.571428571428513%, 95%);
+			background-color: ${({theme})=> theme.filter.hover};
 		}
 	}
 	& svg:last-of-type {
