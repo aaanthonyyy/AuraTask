@@ -82,7 +82,7 @@ const TodoCard = styled.div`
 
 	small {
 		color: ${({theme}) => theme.placeholder};
-		font-size: 10px;
+		font-size: 12px;
 		user-select: none;
 	}
 `;

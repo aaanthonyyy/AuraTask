@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Info = styled.div`
 	color: ${({theme}) => theme.placeholder};
 	text-align: center;
-	font-size: 12px;
+	font-size: 14px;
 	margin-top: 10px;
 
 	kbd {
