@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const TodoCard = styled.div`
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.card.background};
 	border-left: 5px solid ${(props) => props.color} !important;
 	padding: 8px 20px;
 	padding-right: 10px;
@@ -24,8 +24,8 @@ const TodoCard = styled.div`
 		padding-left: 15px;
 		border: none;
 		outline: 1px dotted ${(props) => props.color};
-		color: #373737c5;
-		background-color: #f5f6fa;
+		color: ${({theme}) => theme.text};
+		background-color: ${({theme}) => theme.card.edit};
 
 		&::placeholder {
 		}
@@ -33,7 +33,11 @@ const TodoCard = styled.div`
 
 	h1 {
 		text-decoration: ${(props) => (props.isComplete ? "line-through" : "none")};
-		color: ${(props) => (props.isComplete ? "#9fa9ac" : "#373737")};
+		/* color: ${(props) => (props.isComplete ? "#9fa9ac" : "#373737")}; */
+		color: ${(props) =>
+			props.isComplete
+				? props.theme.card.textComplete
+				: props.theme.card.textActive};
 		font-weight: ${(props) => (props.isComplete ? "500" : "600")};
 		transition: all 100ms ease-in-out;
 		/* user-select: none; */
@@ -44,8 +48,9 @@ const TodoCard = styled.div`
 
 		&::before {
 			content: "\\2713";
-			color: white;
+			color: ${({theme}) => theme.card.background};
 			font-size: 10px;
+			font-weight: bolder;
 			line-height: 15px;
 			text-align: center;
 			display: inline-block;
@@ -55,7 +60,8 @@ const TodoCard = styled.div`
 			height: 13px;
 			width: 13px;
 			border-radius: 20px;
-			background-color: ${(props) => (props.isComplete ? props.color : "#fff")};
+			background-color: ${(props) =>
+				props.isComplete ? props.color : props.theme.card.background};
 			border: 3px solid ${(props) => props.color};
 			outline-offset: 10px;
 		}
@@ -75,8 +81,8 @@ const TodoCard = styled.div`
 	}
 
 	small {
-		color: #9a9ead;
-		font-size: 0.75rem;
+		color: ${({theme}) => theme.placeholder};
+		font-size: 12px;
 		user-select: none;
 	}
 `;

@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 const Info = styled.div`
+	color: ${({theme}) => theme.placeholder};
 	text-align: center;
-	color: #aaaaaa;
-	font-size: 0.85rem;
+	font-size: 14px;
 	margin-top: 10px;
 
 	kbd {
-		background-color: #fffffd;
-		border: 1px solid #cfcfcf;
+		background-color: ${({theme}) => theme.card.background};
+		border: 1px solid ${({theme}) => theme.border};
 		border-radius: 4px;
 		padding: 2px 5px;
 	}

@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
 
@@ -14,7 +16,7 @@ const Plus = styled.input.attrs({
 	position: absolute;
 	padding: 5px;
 	left: unset;
-	top:	15px;
+	top: 15px;
 	right: 15px;
 	transition: all 100ms ease-in-out;
 
@@ -27,13 +29,20 @@ const Submit = (props) => {
 	return (
 		<>
 			<Plus
+				data-background-color={props.background}
 				data-tip="Add Todo"
 				data-effect="solid"
+				data-delay-show="500"
 				onClick={(event) => props.handleSubmit(event)}
 			/>
 			<ReactTooltip />
 		</>
 	);
+};
+
+Submit.propTypes = {
+	background: PropTypes.string,
+	handleSubmit: PropTypes.func
 };
 
 export default Submit;
