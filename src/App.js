@@ -152,18 +152,20 @@ const App = () => {
 					/>
 					{filteredItems.length > 0 ? (
 						<TransitionGroup className="todo-list">
-							{filteredItems.map((item) => {
+							{filteredItems.map((item, index) => {
 								return (
 									<CSSTransition
 										classNames="item"
 										key={item.uuid}
-										timeout={500}
+										timeout={{enter: 500 + index * 500, exit: 500}}
+										mountOnEnter
 										unmountOnExit
 									>
 										<TodoItem
 											handleComplete={() =>
 												dispatch({ type: "COMPLETE", uuid: item.uuid })
 											}
+											style={{ transitionDelay: `${index * 0.05}s` }}
 											handleDelete={() => dispatch({ type: "DELETE", uuid: item.uuid })}
 											dispatchEdit={dispatch}
 											text={item.item}
