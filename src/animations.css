@@ -1,27 +1,32 @@
 .item-enter {
 	opacity: 0;
-    transform: translateY(-25%);
+	transform: translateY(-25%);
 }
 .item-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-	transition: 100ms ease-in !important;
-	transition-property: height, opacity, transform;
+	opacity: 1;
+	transform: translateY(0);
+	transition: all 300ms ease-in-out;
 }
 .item-exit {
 	opacity: 1;
 	height: 50px;
-    transform: scaleY(1);
-	/* animation: shrink 500ms ease-in !important; */
+	transform: scaleY(1);
 }
 .item-exit-active {
 	transform: scaleY(0);
 	margin: 0 !important;
 	padding: 0 !important;
+	border: none;
 	opacity: 0;
 	height: 0;
-	transition-property: height, opacity, transform;
-	transition: 300ms ease-in-out;
+	transition: all 300ms ease-in-out;
+	transition-delay: 0ms !important;
+}
+
+.item-exit-active *,
+.item-exit * {
+	transform: scaleY(0);
+	opacity: 0;
 }
 
 @keyframes shrink {
