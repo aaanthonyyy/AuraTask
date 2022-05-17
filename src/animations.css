@@ -5,7 +5,8 @@
 .item-enter-active {
 	opacity: 1;
 	transform: translateY(0);
-	transition: all 300ms ease-in-out;
+	transition: 300ms ease-in-out;
+	transition-property: opacity transform;
 }
 .item-exit {
 	opacity: 1;

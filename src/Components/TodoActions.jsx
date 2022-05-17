@@ -5,6 +5,7 @@ const TodoActions = styled.div`
 	align-items: center;
 	gap: 2px;
 	border-radius: 8px;
+	/* margin-left: auto; */
 
 	& > svg:not(:last-of-type) {
 		cursor: pointer;
@@ -15,10 +16,11 @@ const TodoActions = styled.div`
 		border-radius: 4px;
 
 		fill: #9c9cb6;
-		transition: background-color 100ms ease-in-out;
+		transition: all;
+		transition: 200ms ease-in-out;
 		
 		&:hover {
-			fill: #5c5c68;
+			fill: #D3E0FA;
 			background-color: ${({theme})=> theme.filter.hover};
 		}
 	}
