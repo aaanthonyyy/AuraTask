@@ -12,8 +12,13 @@ const TodoCard = styled.div`
 	& > div {
 		display: flex;
 		justify-content: space-between;
-		/* align-items: stretch; */
+		align-items: stretch;
 		gap: 20px;
+		/* flex-wrap: wrap; */
+
+		& > div {
+			justify-self: flex-end;
+		}
 	}
 
 	input[type="text"] {
@@ -34,17 +39,23 @@ const TodoCard = styled.div`
 	h1 {
 		text-decoration: ${(props) => (props.isComplete ? "line-through" : "none")};
 		/* color: ${(props) => (props.isComplete ? "#9fa9ac" : "#373737")}; */
+		user-select: ${(props) => (props.isComplete ? "none" : "auto")};
+
+		overflow-wrap: anywhere;
+		hyphens: manual;
+		white-space: pre-line;
+
 		color: ${(props) =>
 			props.isComplete
 				? props.theme.card.textComplete
 				: props.theme.card.textActive};
 		font-weight: ${(props) => (props.isComplete ? "500" : "600")};
 		transition: all 100ms ease-in-out;
-		/* user-select: none; */
+
 		cursor: pointer;
 		font-size: 14px;
 		margin-bottom: -2px;
-		margin-left: 20px;
+		margin-left: 25px;
 
 		&::before {
 			content: "\\2713";
@@ -55,7 +66,7 @@ const TodoCard = styled.div`
 			text-align: center;
 			display: inline-block;
 			margin-bottom: -10px;
-			margin-left: -20px;
+			margin-left: -30px;
 			margin-right: 10px;
 			height: 13px;
 			width: 13px;
@@ -64,6 +75,8 @@ const TodoCard = styled.div`
 				props.isComplete ? props.color : props.theme.card.background};
 			border: 3px solid ${(props) => props.color};
 			outline-offset: 10px;
+
+			transition: all 150ms ease-in-out;
 		}
 	}
 
@@ -82,7 +95,10 @@ const TodoCard = styled.div`
 
 	small {
 		color: ${({theme}) => theme.placeholder};
+		display: inline-block;
 		font-size: 12px;
+		margin-left: 25px;
+		margin-top: 1rem;
 		user-select: none;
 	}
 `;
