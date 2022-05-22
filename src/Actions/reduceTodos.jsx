@@ -34,12 +34,23 @@ const handleEdit = (state, action) => {
 	return newState;
 };
 
+const handleSort = (state, sortAsc) => {
+	const newState = [...state].reverse();
+	addLocalStorage(newState);
+
+	return newState;
+};
+
 const reduceTodos = (state, action) => {
 	switch (action.type) {
-		case "ADD_TODO":
-			addLocalStorage([...state, action.payload]);
-			return [...state, action.payload];
-
+		case "ADD_TODO": {
+			if (action.sort) {
+				addLocalStorage([...state, action.payload]);
+				return [...state, action.payload];
+			}
+			addLocalStorage([action.payload, ...state]);
+			return [action.payload, ...state];
+		}
 		case "DELETE":
 			return handleDelete(state, action);
 
@@ -53,6 +64,11 @@ const reduceTodos = (state, action) => {
 
 		case "REFRESH": {
 			return action.payload;
+		}
+
+		case "SORT": {
+			console.log(typeof action.payload);
+			return handleSort(action.payload, action.sortAsc);
 		}
 
 		default:
