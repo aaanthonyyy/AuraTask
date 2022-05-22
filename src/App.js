@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useReducer } from "react";
+import React, {
+	useState,
+	useRef,
+	useEffect,
+	useReducer,
+	useLayoutEffect,
+} from "react";
 import {
 	getLocalStorageTodos,
 	getLocalFilters,
@@ -23,6 +29,7 @@ import Background from "./Components/Background";
 import Filter from "./Components/Filter";
 import Submit from "./Components/Submit";
 import Form from "./Components/Form";
+import SortBy from "./Components/SortBy";
 import Info from "./Components/Info";
 import moment from "moment";
 
@@ -39,6 +46,10 @@ const App = () => {
 
 	const [isDarkTheme, setIsDarkTheme] = useState(
 		JSON.parse(sessionStorage.getItem("theme")) || prefersDark
+	);
+
+	const [sortAsc, setSortAsc] = useState(
+		JSON.parse(localStorage.getItem("sortAsc") || "false")
 	);
 
 	// input ref
@@ -103,11 +114,26 @@ const App = () => {
 		};
 	}, [todoItems]);
 
+	// handle sort change
+	const firstRef = useRef(true);
+	useLayoutEffect(() => {
+		if (firstRef.current) {
+			firstRef.current = false;
+		} else {
+			dispatch({
+				type: "SORT",
+				payload: getLocalStorageTodos(),
+				sortAsc: sortAsc,
+			});
+			localStorage.setItem("sortAsc", JSON.stringify(sortAsc));
+			firstRef.current = false;
+		}
+	}, [sortAsc]);
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
 		const date = moment();
-		console.log(date);
 
 		if (ref.current.value && ref.current.value !== " ") {
 			const newItem = {
@@ -118,7 +144,7 @@ const App = () => {
 				uuid: uuid(),
 			};
 			ref.current.value = null;
-			dispatch({ type: "ADD_TODO", payload: newItem });
+			dispatch({ type: "ADD_TODO", payload: newItem, sort: sortAsc });
 		}
 	};
 
@@ -150,6 +176,7 @@ const App = () => {
 						filter={filter}
 						count={todoItems.length}
 					/>
+					<SortBy sortAsc={sortAsc} handleSortAsc={setSortAsc} />
 					{filteredItems.length > 0 ? (
 						<TransitionGroup className="todo-list">
 							{filteredItems.map((item, index) => {
@@ -157,7 +184,7 @@ const App = () => {
 									<CSSTransition
 										classNames="item"
 										key={item.uuid}
-										timeout={{enter: 500 + index * 500, exit: 500}}
+										timeout={{ enter: 500 + index * 500, exit: 500 }}
 										mountOnEnter
 										unmountOnExit
 									>

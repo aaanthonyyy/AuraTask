@@ -5,6 +5,7 @@
   "dependencies": {
     "@lottiefiles/lottie-interactivity": "^1.0.0",
     "@lottiefiles/lottie-player": "^1.1.1",
+    "@radix-ui/react-select": "^0.1.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

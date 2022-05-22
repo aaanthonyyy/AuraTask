@@ -41,6 +41,7 @@ svg {
   fill: #5566AA;
   font-size: 100px;
   width: 18px;
+  height: auto;
 }
 
 .delete svg{
