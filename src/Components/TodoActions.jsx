@@ -20,7 +20,12 @@ const TodoActions = styled.div`
 		transition: 200ms ease-in-out;
 		
 		&:hover {
-			fill: #D3E0FA;
+			fill: #777791;
+			background-color: ${({theme})=> theme.filter.hover + "AA"};
+		}
+
+		&:active,
+		&:focus {
 			background-color: ${({theme})=> theme.filter.hover};
 		}
 	}

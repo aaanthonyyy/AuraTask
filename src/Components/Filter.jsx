@@ -109,7 +109,7 @@ const Filter = (props) => {
 				/>
 				<label htmlFor="active">
 					Active
-					{props.filter === "ACTIVE" && (
+					{props.filter === "ACTIVE" && props.activeCount > 0 && (
 						<span>{props.activeCount < 100 ? props.activeCount : "99+"}</span>
 					)}
 				</label>
