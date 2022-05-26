@@ -175,6 +175,7 @@ const App = () => {
 						handleFilter={setFilter}
 						filter={filter}
 						count={todoItems.length}
+						activeCount={filteredItems.length}
 					/>
 					<SortBy sortAsc={sortAsc} handleSortAsc={setSortAsc} />
 					{filteredItems.length > 0 ? (
