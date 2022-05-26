@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-	background-color: ${({theme}) => theme.filter.background};
+	background-color: ${({ theme }) => theme.filter.background};
 	max-width: 400px;
 	margin: auto;
 	padding: 5px;
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 	}
 
 	label {
-		color: ${({theme}) => theme.text};
+		color: ${({ theme }) => theme.text};
 		cursor: pointer;
 		display: inline-flex;
 		align-items: center;
@@ -43,7 +43,7 @@ const Wrapper = styled.div`
 		z-index: 101;
 
 		&:hover {
-			background-color: ${({theme}) => theme.filter.hover};
+			background-color: ${({ theme }) => theme.filter.hover};
 		}
 
 		span {
@@ -59,7 +59,7 @@ const Wrapper = styled.div`
 
 	input:checked + label {
 		color: #fff;
-		background-color: ${({theme}) => theme.filter.active};
+		background-color: ${({ theme }) => theme.filter.active};
 		transition: background-color 300ms ease-in-out;
 
 		span {
@@ -107,7 +107,12 @@ const Filter = (props) => {
 					checked={props.filter === "ACTIVE"}
 					onChange={() => props.handleFilter("ACTIVE")}
 				/>
-				<label htmlFor="active">Active</label>
+				<label htmlFor="active">
+					Active
+					{props.filter === "ACTIVE" && props.activeCount > 0 && (
+						<span>{props.activeCount < 100 ? props.activeCount : "99+"}</span>
+					)}
+				</label>
 			</div>
 		</Wrapper>
 	);
@@ -117,6 +122,7 @@ Filter.propTypes = {
 	filter: PropTypes.string,
 	handleFilter: PropTypes.func,
 	count: PropTypes.number,
+	activeCount: PropTypes.number,
 };
 
 export default Filter;
