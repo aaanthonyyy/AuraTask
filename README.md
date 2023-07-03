@@ -8,7 +8,7 @@
 
 <p align=center>
   <img height=auto width=120px src="https://github.com/aaanthonyyy/react-todo-list/blob/master/public/logo.png"/>
-  <h3 align="center">Sexy Todo List</h3>
+  <h3 align="center">AuraTask</h3>
   
   <p align="center">
     A simple todo-list web app built using React.
